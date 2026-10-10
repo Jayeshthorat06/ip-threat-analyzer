@@ -1,9 +1,11 @@
 import express from 'express';
 import { validateIp } from './services/ipValidator';
 import { scoreThreat, ThreatSignals } from './services/threatScorer';
+import { apiRateLimiter } from './middleware/rateLimiter';
 
 export const app = express();
 app.use(express.json({ limit: '16kb' }));
+app.use(apiRateLimiter);
 
 app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' });
